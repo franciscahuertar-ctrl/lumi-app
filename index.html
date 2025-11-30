@@ -13,7 +13,6 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1f3a 0%, #2d1b4e 100%);
             height: 100vh;
             overflow: hidden;
             display: flex;
@@ -27,14 +26,66 @@
             justify-content: center;
             padding: 40px;
             position: relative;
+            overflow: hidden;
+        }
+
+        .background-carousel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .background-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .background-slide.active {
+            opacity: 1;
+        }
+
+        .background-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(0, 0, 0, 0.3) 0%,
+                rgba(0, 0, 0, 0.2) 50%,
+                rgba(0, 0, 0, 0.3) 100%
+            );
+            z-index: 1;
+        }
+
+        .left-content {
+            position: relative;
             z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .lumi-main {
-            width: 300px;
-            height: 300px;
+            width: 280px;
+            height: 280px;
             margin-bottom: 40px;
-            filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.7));
+            filter: drop-shadow(0 0 50px rgba(255, 215, 0, 0.9));
             animation: float 4s ease-in-out infinite;
         }
 
@@ -45,18 +96,22 @@
 
         .main-title {
             color: #ffd700;
-            font-size: 2.8rem;
+            font-size: 3.2rem;
             font-weight: bold;
             margin-bottom: 15px;
             text-align: center;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            text-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.8),
+                0 0 60px rgba(255, 215, 0, 0.5),
+                0 2px 4px rgba(0, 0, 0, 0.8);
         }
 
         .main-subtitle {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.5rem;
             margin-bottom: 50px;
             text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
         }
 
         .nav-buttons {
@@ -68,8 +123,8 @@
         }
 
         .nav-btn {
-            background: rgba(26, 31, 58, 0.8);
-            border: 2px solid rgba(255, 215, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 215, 0, 0.6);
             border-radius: 20px;
             padding: 25px 20px;
             color: white;
@@ -77,14 +132,15 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
 
         .nav-btn:hover {
             transform: translateY(-5px);
-            border-color: rgba(255, 215, 0, 0.8);
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+            border-color: rgba(255, 215, 0, 1);
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.4);
         }
 
         .nav-btn .emoji {
@@ -99,13 +155,14 @@
         }
 
         .nav-btn.emergency {
-            border-color: rgba(255, 100, 100, 0.6);
-            background: rgba(139, 0, 0, 0.2);
+            border-color: rgba(255, 100, 100, 0.7);
+            background: rgba(139, 0, 0, 0.3);
         }
 
         .nav-btn.emergency:hover {
             border-color: rgba(255, 100, 100, 1);
-            box-shadow: 0 8px 25px rgba(255, 100, 100, 0.4);
+            background: rgba(139, 0, 0, 0.5);
+            box-shadow: 0 8px 30px rgba(255, 100, 100, 0.5);
         }
 
         .right-panel {
@@ -116,12 +173,7 @@
             justify-content: center;
             padding: 60px;
             position: relative;
-            background: linear-gradient(
-                135deg, 
-                rgba(232, 213, 242, 0.1) 0%,
-                rgba(213, 232, 247, 0.1) 50%,
-                rgba(242, 232, 245, 0.1) 100%
-            );
+            background: linear-gradient(135deg, #1a1f3a 0%, #2d1b4e 100%);
             border-left: 2px solid rgba(255, 215, 0, 0.2);
         }
 
@@ -149,28 +201,29 @@
         .phrases-container {
             position: relative;
             z-index: 10;
-            max-width: 600px;
+            max-width: 700px;
             text-align: center;
         }
 
         .phrase-title {
             color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
+            font-size: 1rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
         }
 
         .phrase {
             color: #ffffff;
-            font-size: 1.8rem;
-            line-height: 1.6;
-            min-height: 200px;
+            font-size: 2.8rem;
+            line-height: 1.5;
+            min-height: 250px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 300;
             padding: 20px;
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
         }
 
         .footer {
@@ -192,8 +245,7 @@
                 min-height: 100vh;
             }
 
-            .left-panel,
-            .right-panel {
+            .left-panel, .right-panel {
                 width: 100%;
                 min-height: 50vh;
             }
@@ -204,21 +256,17 @@
             }
 
             .lumi-main {
-                width: 200px;
-                height: 200px;
+                width: 220px;
+                height: 220px;
             }
 
             .main-title {
-                font-size: 2rem;
-            }
-
-            .nav-buttons {
-                max-width: 400px;
+                font-size: 2.5rem;
             }
 
             .phrase {
-                font-size: 1.4rem;
-                min-height: 150px;
+                font-size: 2rem;
+                min-height: 180px;
             }
         }
 
@@ -230,50 +278,70 @@
             .lumi-main {
                 width: 180px;
                 height: 180px;
-                margin-bottom: 30px;
             }
 
             .main-title {
-                font-size: 1.8rem;
-            }
-
-            .main-subtitle {
-                font-size: 1.1rem;
+                font-size: 2rem;
             }
 
             .phrase {
-                font-size: 1.2rem;
+                font-size: 1.6rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="left-panel">
-        <img src="images/lumi.png" alt="Lumi" class="lumi-main">
-        
-        <h1 class="main-title">Hola, soy Lumi ⭐</h1>
-        <p class="main-subtitle">Tu amiga estrella</p>
+        <div class="background-carousel">
+            <div class="background-slide active">
+                <img src="images/portada_1.png" alt="Fondo 1">
+            </div>
+            <div class="background-slide">
+                <img src="images/portada_2.png" alt="Fondo 2">
+            </div>
+            <div class="background-slide">
+                <img src="images/portada_3.png" alt="Fondo 3">
+            </div>
+            <div class="background-slide">
+                <img src="images/portada_4.png" alt="Fondo 4">
+            </div>
+            <div class="background-slide">
+                <img src="images/portada_5.png" alt="Fondo 5">
+            </div>
+            <div class="background-slide">
+                <img src="images/portada_6.png" alt="Fondo 6">
+            </div>
+        </div>
 
-        <div class="nav-buttons">
-            <a href="#" class="nav-btn">
-                <span class="emoji">✨</span>
-                <span class="text">Frases del Día</span>
-            </a>
+        <div class="overlay"></div>
 
-            <a href="#" class="nav-btn emergency">
-                <span class="emoji">🫁</span>
-                <span class="text">Respiración</span>
-            </a>
+        <div class="left-content">
+            <img src="images/lumi.png" alt="Lumi" class="lumi-main">
+            
+            <h1 class="main-title">Hola, soy Lumi ⭐</h1>
+            <p class="main-subtitle">Tu amiga estrella</p>
 
-            <a href="#" class="nav-btn">
-                <span class="emoji">🧘</span>
-                <span class="text">Meditación</span>
-            </a>
+            <div class="nav-buttons">
+                <a href="#" class="nav-btn">
+                    <span class="emoji">✨</span>
+                    <span class="text">Frases del Día</span>
+                </a>
 
-            <a href="chat.html" class="nav-btn">
-                <span class="emoji">💬</span>
-                <span class="text">Hablar con Lumi</span>
-            </a>
+                <a href="#" class="nav-btn emergency">
+                    <span class="emoji">🫁</span>
+                    <span class="text">Respiración</span>
+                </a>
+
+                <a href="#" class="nav-btn">
+                    <span class="emoji">🧘</span>
+                    <span class="text">Meditación</span>
+                </a>
+
+                <a href="chat.html" class="nav-btn">
+                    <span class="emoji">💬</span>
+                    <span class="text">Hablar con Lumi</span>
+                </a>
+            </div>
         </div>
 
         <div class="footer">
@@ -291,6 +359,7 @@
     </div>
 
     <script>
+        // ESTRELLAS
         const starsContainer = document.getElementById('stars');
         for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
@@ -303,6 +372,22 @@
             starsContainer.appendChild(star);
         }
 
+        // CARRUSEL DE FONDO
+        let currentBgSlide = 0;
+        const bgSlides = document.querySelectorAll('.background-slide');
+        const totalBgSlides = bgSlides.length;
+
+        function showBgSlide(n) {
+            bgSlides.forEach(slide => slide.classList.remove('active'));
+            currentBgSlide = (n + totalBgSlides) % totalBgSlides;
+            bgSlides[currentBgSlide].classList.add('active');
+        }
+
+        setInterval(() => {
+            showBgSlide(currentBgSlide + 1);
+        }, 5000);
+
+        // FRASES
         const frasesLumi = [
             "Hola...",
             "Soy Lumi, tu amiga estrella.",
@@ -326,7 +411,6 @@
         let fraseIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
-        let typingSpeed = 80;
 
         function typeEffect() {
             const currentFrase = frasesLumi[fraseIndex];
@@ -352,7 +436,7 @@
                 }
             }
 
-            setTimeout(typeEffect, isDeleting ? 40 : typingSpeed);
+            setTimeout(typeEffect, isDeleting ? 40 : 80);
         }
 
         setTimeout(typeEffect, 1000);
