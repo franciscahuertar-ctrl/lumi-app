@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respiración - LUMI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .lumi-small {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+        }
+
+        .title {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .breathing-circle-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 50px auto;
+        }
+
+        .breathing-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.4);
+            transition: transform 4s ease-in-out, box-shadow 4s ease-in-out;
+        }
+
+        .breathing-circle.inhale {
+            transform: scale(1.5);
+            box-shadow: 0 0 80px rgba(255, 255, 255, 0.8);
+        }
+
+        .breathing-circle.hold {
+            transform: scale(1.5);
+            box-shadow: 0 0 80px rgba(255, 255, 255, 0.8);
+        }
+
+        .breathing-circle.exhale {
+            transform: scale(1);
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.4);
+        }
+
+        .instruction {
+            color: white;
+            font-size: 2rem;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .counter {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 3rem;
+            font-weight: bold;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .controls {
+            margin-top: 80px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50px;
+            padding: 15px 40px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: rgba(255, 215, 0, 0.3);
+            border-color: rgba(255, 215, 0, 0.8);
+        }
+
+        .btn-primary:hover {
+            background: rgba(255, 215, 0, 0.5);
+            border-color: rgba(255, 215, 0, 1);
+        }
+
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50px;
+            padding: 10px 25px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 1);
+            transform: translateX(-5px);
+        }
+
+        .tips {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tips h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .tips ul {
+            list-style: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            line-height: 1.8;
+            text-align: left;
+        }
+
+        .tips li:before {
+            content: "✨ ";
+            margin-right: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .breathing-circle-container {
+                width: 250px;
+                height: 250px;
+            }
+
+            .instruction {
+                font-size: 1.5rem;
+            }
+
+            .counter {
+                font-size: 2.5rem;
+                bottom: -40px;
+            }
+
+            .controls {
+                margin-top: 60px;
+            }
+
+            .btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+
+            .back-link {
+                top: 10px;
+                left: 10px;
+                padding: 8px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .breathing-circle-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .instruction {
+                font-size: 1.3rem;
+            }
+
+            .counter {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Volver</a>
+
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <div class="header">
+            <img src="images/lumi.png" alt="Lumi" class="lumi-small">
+            <h1 class="title">Respiremos Juntos 🫁</h1>
+            <p class="subtitle">Sigue el círculo y respira conmigo</p>
+        </div>
+
+        <div class="breathing-circle-container">
+            <div class="breathing-circle" id="breathingCircle">
+                <div class="instruction" id="instruction">Presiona Iniciar</div>
+            </div>
+            <div class="counter" id="counter"></div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="startBtn" onclick="startBreathing()">
+                Iniciar
+            </button>
+            <button class="btn" id="stopBtn" onclick="stopBreathing()">
+                Detener
+            </button>
+        </div>
+
+        <div class="tips">
+            <h3>💫 Consejos para respirar mejor</h3>
+            <ul>
+                <li>Encuentra un lugar tranquilo y cómodo</li>
+                <li>Respira por la nariz lentamente</li>
+                <li>Siente cómo tu barriga se llena de aire</li>
+                <li>Exhala despacio por la boca</li>
+                <li>Repite hasta que te sientas mejor</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // ESTRELLAS
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // SISTEMA DE RESPIRACIÓN
+        const circle = document.getElementById('breathingCircle');
+        const instruction = document.getElementById('instruction');
+        const counter = document.getElementById('counter');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+
+        let isBreathing = false;
+        let breathingInterval;
+        let currentPhase = 0;
+
+        const phases = [
+            { name: 'Inhala', class: 'inhale', duration: 4000, text: 'Inhala profundo' },
+            { name: 'Sostén', class: 'hold', duration: 4000, text: 'Sostén el aire' },
+            { name: 'Exhala', class: 'exhale', duration: 4000, text: 'Exhala despacio' },
+            { name: 'Pausa', class: 'exhale', duration: 2000, text: 'Descansa' }
+        ];
+
+        function startBreathing() {
+            if (isBreathing) return;
+            
+            isBreathing = true;
+            startBtn.disabled = true;
+            startBtn.style.opacity = '0.5';
+            
+            runBreathingCycle();
+        }
+
+        function stopBreathing() {
+            isBreathing = false;
+            startBtn.disabled = false;
+            startBtn.style.opacity = '1';
+            
+            if (breathingInterval) {
+                clearInterval(breathingInterval);
+            }
+            
+            circle.className = 'breathing-circle';
+            instruction.textContent = 'Presiona Iniciar';
+            counter.textContent = '';
+            currentPhase = 0;
+        }
+
+        function runBreathingCycle() {
+            if (!isBreathing) return;
+            
+            const phase = phases[currentPhase];
+            
+            // Actualizar clase y texto
+            circle.className = 'breathing-circle ' + phase.class;
+            instruction.textContent = phase.text;
+            
+            // Contador
+            let timeLeft = phase.duration / 1000;
+            counter.textContent = timeLeft;
+            
+            const countInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                    counter.textContent = timeLeft;
+                } else {
+                    clearInterval(countInterval);
+                }
+            }, 1000);
+            
+            // Siguiente fase
+            setTimeout(() => {
+                if (!isBreathing) return;
+                
+                currentPhase = (currentPhase + 1) % phases.length;
+                runBreathingCycle();
+            }, phase.duration);
+        }
+
+        // Voz (opcional, solo si el navegador lo soporta)
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'es-ES';
+                utterance.rate = 0.8;
+                utterance.pitch = 1.2;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Detener al salir de la página
+        window.addEventListener('beforeunload', () => {
+            stopBreathing();
+        });
+    </script>
+</body>
+</html>
