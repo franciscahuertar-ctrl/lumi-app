@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respiración - LUMI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1f3a 0%, #2d1b4e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .header {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .btn-volver {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            color: #ffd700;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn-volver:hover {
+            background: rgba(255, 215, 0, 0.3);
+            border-color: #ffd700;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ffd700;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .instrucciones {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .instrucciones h2 {
+            color: #ffd700;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .instrucciones p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .circulo-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 40px auto;
+        }
+
+        .circulo {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.3), rgba(135, 206, 250, 0.2));
+            border: 3px solid rgba(255, 215, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 1s ease-in-out;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .circulo.inhalar {
+            transform: scale(1.3);
+            background: radial-gradient(circle, rgba(135, 206, 250, 0.5), rgba(100, 149, 237, 0.3));
+            border-color: rgba(135, 206, 250, 0.8);
+            box-shadow: 0 0 50px rgba(135, 206, 250, 0.6);
+        }
+
+        .circulo.sostener {
+            transform: scale(1.3);
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.5), rgba(255, 165, 0, 0.3));
+            border-color: rgba(255, 215, 0, 0.8);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
+        }
+
+        .circulo.exhalar {
+            transform: scale(1);
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.1));
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .lumi-respirando {
+            font-size: 5rem;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+            transition: all 1s ease-in-out;
+        }
+
+        .circulo.inhalar .lumi-respirando {
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 40px rgba(135, 206, 250, 0.9));
+        }
+
+        .texto-guia {
+            font-size: 2rem;
+            color: #ffd700;
+            margin: 20px 0;
+            min-height: 60px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .contador {
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .controles {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: rgba(255, 215, 0, 0.3);
+            border-color: #ffd700;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .ciclos {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .circulo-container {
+                width: 250px;
+                height: 250px;
+            }
+
+            .lumi-respirando {
+                font-size: 4rem;
+            }
+
+            .texto-guia {
+                font-size: 1.5rem;
+            }
+
+            .contador {
+                font-size: 2.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="btn-volver">← Volver</a>
+    </div>
+
+    <div class="container">
+        <h1>🫁 Ejercicio de Respiración</h1>
+
+        <div class="instrucciones">
+            <h2>Técnica 4-7-8</h2>
+            <p>Este ejercicio ayuda a calmar la ansiedad y reducir el estrés. Sigue las instrucciones en pantalla.</p>
+        </div>
+
+        <div class="circulo-container">
+            <div class="circulo" id="circulo">
+                <div class="lumi-respirando">⭐</div>
+            </div>
+        </div>
+
+        <div class="texto-guia" id="textoGuia">Presiona "Comenzar"</div>
+        <div class="contador" id="contador"></div>
+
+        <div class="controles">
+            <button class="btn" id="btnComenzar" onclick="comenzarEjercicio()">Comenzar</button>
+            <button class="btn" id="btnPausar" onclick="pausarEjercicio()" disabled>Pausar</button>
+            <button class="btn" id="btnReiniciar" onclick="reiniciarEjercicio()">Reiniciar</button>
+        </div>
+
+        <div class="ciclos" id="ciclos">Ciclo 0 de 5</div>
+    </div>
+
+    <script>
+        let ejercicioActivo = false;
+        let pausado = false;
+        let cicloActual = 0;
+        let totalCiclos = 5;
+        let tiempoRestante = 0;
+        let intervalo;
+
+        const circulo = document.getElementById('circulo');
+        const textoGuia = document.getElementById('textoGuia');
+        const contador = document.getElementById('contador');
+        const ciclosDisplay = document.getElementById('ciclos');
+        const btnComenzar = document.getElementById('btnComenzar');
+        const btnPausar = document.getElementById('btnPausar');
+
+        async function comenzarEjercicio() {
+            if (ejercicioActivo) return;
+            
+            ejercicioActivo = true;
+            btnComenzar.disabled = true;
+            btnPausar.disabled = false;
+            cicloActual = 0;
+
+            while (cicloActual < totalCiclos && ejercicioActivo) {
+                cicloActual++;
+                ciclosDisplay.textContent = `Ciclo ${cicloActual} de ${totalCiclos}`;
+
+                // Inhalar - 4 segundos
+                await fase('inhalar', 'Inhala profundamente...', 4);
+                
+                // Sostener - 7 segundos
+                await fase('sostener', 'Sostén la respiración...', 7);
+                
+                // Exhalar - 8 segundos
+                await fase('exhalar', 'Exhala lentamente...', 8);
+
+                // Pausa entre ciclos
+                if (cicloActual < totalCiclos) {
+                    await fase('', 'Descansa...', 2);
+                }
+            }
+
+            if (ejercicioActivo) {
+                textoGuia.textContent = '¡Excelente trabajo! 💕';
+                circulo.className = 'circulo';
+                contador.textContent = '';
+                ejercicioActivo = false;
+                btnComenzar.disabled = false;
+                btnPausar.disabled = true;
+            }
+        }
+
+        function fase(clase, texto, segundos) {
+            return new Promise((resolve) => {
+                circulo.className = 'circulo ' + clase;
+                textoGuia.textContent = texto;
+                tiempoRestante = segundos;
+
+                intervalo = setInterval(() => {
+                    if (!pausado && ejercicioActivo) {
+                        contador.textContent = tiempoRestante;
+                        tiempoRestante--;
+
+                        if (tiempoRestante < 0) {
+                            clearInterval(intervalo);
+                            resolve();
+                        }
+                    }
+                }, 1000);
+            });
+        }
+
+        function pausarEjercicio() {
+            pausado = !pausado;
+            btnPausar.textContent = pausado ? 'Reanudar' : 'Pausar';
+        }
+
+        function reiniciarEjercicio() {
+            ejercicioActivo = false;
+            pausado = false;
+            cicloActual = 0;
+            clearInterval(intervalo);
+            
+            circulo.className = 'circulo';
+            textoGuia.textContent = 'Presiona "Comenzar"';
+            contador.textContent = '';
+            ciclosDisplay.textContent = 'Ciclo 0 de 5';
+            
+            btnComenzar.disabled = false;
+            btnPausar.disabled = true;
+            btnPausar.textContent = 'Pausar';
+        }
+    </script>
+</body>
+</html>
